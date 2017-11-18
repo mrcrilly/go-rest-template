@@ -2,27 +2,31 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
+	log "github.com/sirupsen/logrus"
 )
 
 var globalConfig *Configuration
 var globalStatus *Status
+var globalLogger *log.Logger
 
 func init() {
 	globalStatus = new(Status)
+	globalStatus.HttpStatusCodes = make(map[int]int, 0)
 	globalConfig = new(Configuration)
-
-	err := globalConfig.Load("config.json")
-	if err != nil {
-		panic(err)
-	}
-
 }
 
 func main() {
-	err := serveRequests()
+	err := globalConfig.Load("config.json")
+	checkErrorAndPanic(err)
+
+	//err = buildLogger()
+	//checkErrorAndPanic(err)
+
+	err = serveRequests()
 	checkErrorAndPanic(err)
 }
 
@@ -31,6 +35,17 @@ func checkErrorAndPanic(err error) {
 		panic(err)
 	}
 }
+
+//func buildLogger() (err error) {
+//fd, err := os.Open(globalConfig.Logging.Path)
+//if err != nil {
+//if os.IsNotExist(err) {
+
+//}
+//}
+//globalLogger = log.New(fd, "app: ", log.Lshortfile)
+//return
+//}
 
 func serveRequests() (err error) {
 	router := mux.NewRouter()
@@ -47,9 +62,6 @@ func serveRequests() (err error) {
 		)
 		server.Handler = router
 		err = server.ListenAndServe()
-		if err != nil {
-			return
-		}
 	}
 
 	return

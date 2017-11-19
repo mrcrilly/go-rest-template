@@ -14,7 +14,7 @@ type Configuration struct {
 	} `json:"http"`
 
 	Logging struct {
-		Path string `json:"path"`
+		File string `json:"file"`
 	} `json:"logging"`
 }
 

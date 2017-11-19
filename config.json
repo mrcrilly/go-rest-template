@@ -8,6 +8,6 @@
     "bind_port": "8080"
   },
   "logging": {
-    "path": "logs/"
+    "file": "app.log"
   }
 }

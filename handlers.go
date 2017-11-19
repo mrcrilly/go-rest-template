@@ -3,11 +3,17 @@ package main
 import (
 	"fmt"
 	"net/http"
+
+	log "github.com/sirupsen/logrus"
 )
 
 func HandlerIndex(w http.ResponseWriter, r *http.Request) {
 	go globalStatus.IncrementRequestCount()
-	go globalLogger.Println("index received request")
+	go globalLogger.WithFields(log.Fields{
+		"handler": "healthcheck",
+		"method":  r.Method,
+		"path":    r.URL.String(),
+	}).Info("working...")
 
 	result := new(Message)
 	result.Message = "ok"
@@ -19,6 +25,11 @@ func HandlerIndex(w http.ResponseWriter, r *http.Request) {
 
 func HandlerReadOnlyConfig(w http.ResponseWriter, r *http.Request) {
 	go globalStatus.IncrementRequestCount()
+	go globalLogger.WithFields(log.Fields{
+		"handler": "healthcheck",
+		"method":  r.Method,
+		"path":    r.URL.String(),
+	}).Info("working...")
 
 	result := new(Message)
 	result.Message = "ok"
@@ -31,6 +42,11 @@ func HandlerReadOnlyConfig(w http.ResponseWriter, r *http.Request) {
 
 func HandlerHealthCheck(w http.ResponseWriter, r *http.Request) {
 	go globalStatus.IncrementRequestCount()
+	go globalLogger.WithFields(log.Fields{
+		"handler": "healthcheck",
+		"method":  r.Method,
+		"path":    r.URL.String(),
+	}).Info("working...")
 
 	result := new(Message)
 	result.Message = "alive"

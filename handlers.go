@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"net/http"
 
-	log "github.com/sirupsen/logrus"
+	"github.com/sirupsen/logrus"
 )
 
 func HandlerIndex(w http.ResponseWriter, r *http.Request) {
 	go globalStatus.IncrementRequestCount()
-	go globalLogger.WithFields(log.Fields{
+	go globalLogger.WithFields(logrus.Fields{
 		"handler": "healthcheck",
 		"method":  r.Method,
 		"path":    r.URL.String(),
@@ -25,7 +25,7 @@ func HandlerIndex(w http.ResponseWriter, r *http.Request) {
 
 func HandlerReadOnlyConfig(w http.ResponseWriter, r *http.Request) {
 	go globalStatus.IncrementRequestCount()
-	go globalLogger.WithFields(log.Fields{
+	go globalLogger.WithFields(logrus.Fields{
 		"handler": "healthcheck",
 		"method":  r.Method,
 		"path":    r.URL.String(),
@@ -42,7 +42,7 @@ func HandlerReadOnlyConfig(w http.ResponseWriter, r *http.Request) {
 
 func HandlerHealthCheck(w http.ResponseWriter, r *http.Request) {
 	go globalStatus.IncrementRequestCount()
-	go globalLogger.WithFields(log.Fields{
+	go globalLogger.WithFields(logrus.Fields{
 		"handler": "healthcheck",
 		"method":  r.Method,
 		"path":    r.URL.String(),

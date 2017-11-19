@@ -1,11 +1,13 @@
 {
   "http": {
     "tls": false,
+    "tls_settings": {
+      "certificate": ""
+    },
     "bind_ip": "0.0.0.0",
     "bind_port": "8080"
   },
   "logging": {
-    "level": "debugging",
-    "file": "logs/http.log"
+    "file": "app.log"
   }
 }

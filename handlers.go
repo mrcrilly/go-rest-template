@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
 )
 
 func HandlerIndex(w http.ResponseWriter, r *http.Request) {
@@ -34,7 +35,7 @@ func HandlerReadOnlyConfig(w http.ResponseWriter, r *http.Request) {
 	result := new(Message)
 	result.Message = "ok"
 	result.Status = http.StatusOK
-	result.Result = globalConfig
+	result.Result = viper.AllSettings()
 
 	go globalStatus.IncrementHttpStatusCode(result.Status)
 	fmt.Fprint(w, result.ToJsonString())

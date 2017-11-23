@@ -1,30 +1,32 @@
 package main
 
 import (
-	"fmt"
-	"net/http"
 	"os"
 
-	"github.com/gorilla/mux"
 	"github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
 )
 
-var globalConfig *Configuration
 var globalStatus *Status
 var globalLogger *logrus.Logger
 
 func init() {
 	globalStatus = new(Status)
 	globalStatus.HttpStatusCodes = make(map[int]int, 0)
-	globalConfig = new(Configuration)
 	globalLogger = logrus.New()
+
+	viper.SetDefault("http_bind_port", "8080")
+	viper.SetDefault("http_bind_addr", "127.0.0.1")
+	viper.SetDefault("logging_file", "app.log")
 }
 
 func main() {
-	err := globalConfig.Load("config.json")
+	viper.SetConfigName("config")
+	viper.AddConfigPath(".")
+	err := viper.ReadInConfig()
 	checkErrorAndPanic(err)
 
-	fd, err := os.OpenFile(globalConfig.Logging.File, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	fd, err := os.OpenFile(viper.GetString("logging_file"), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	checkErrorAndPanic(err)
 	globalLogger.Out = fd
 
@@ -36,24 +38,4 @@ func checkErrorAndPanic(err error) {
 	if err != nil {
 		panic(err)
 	}
-}
-
-func serveRequests() (err error) {
-	router := mux.NewRouter()
-	router.HandleFunc("/", HandlerIndex)
-	router.HandleFunc("/config", HandlerReadOnlyConfig)
-	router.HandleFunc("/health", HandlerHealthCheck)
-
-	server := new(http.Server)
-
-	if globalConfig.Http.Tls {
-	} else {
-		server.Addr = fmt.Sprintf("%s:%s",
-			globalConfig.Http.BindIp, globalConfig.Http.BindPort,
-		)
-		server.Handler = router
-		err = server.ListenAndServe()
-	}
-
-	return
 }

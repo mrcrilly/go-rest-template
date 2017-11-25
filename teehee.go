@@ -10,10 +10,9 @@ import (
 var globalStatus *Status
 var globalLogger *logrus.Logger
 
-func Init(configFrom, logTo string) (err error) {
+func Init(configFrom string) (err error) {
 	globalStatus = new(Status)
 	globalStatus.HttpStatusCodes = make(map[int]int, 0)
-	globalLogger = logrus.New()
 
 	// set some sensible defaults so we can ignore
 	// the need for a configuration file
@@ -26,17 +25,19 @@ func Init(configFrom, logTo string) (err error) {
 	viper.SetConfigName(configFrom)
 	viper.AddConfigPath(".")
 
-	err = viper.ReadInConfig()
-	if err != nil {
-		return
+	// ignoring the error because we've set sensible(?)
+	// defaults
+	viper.ReadInConfig()
+
+	if viper.GetBool("logging.enabled") {
+		globalLogger = logrus.New()
+		fd, err := os.OpenFile(viper.GetString("logging.file"),
+			os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+		if err != nil {
+			return err
+		}
+		globalLogger.Out = fd
 	}
 
-	fd, err := os.OpenFile(viper.GetString("logging.file"),
-		os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	if err != nil {
-		return
-	}
-
-	globalLogger.Out = fd
 	return
 }

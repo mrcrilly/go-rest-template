@@ -3,7 +3,7 @@ package main
 import "github.com/mrcrilly/teehee"
 
 func main() {
-	teehee.Init("config.toml", "app.log")
+	teehee.Init("config.toml")
 	teehee.StartServer()
 }
 

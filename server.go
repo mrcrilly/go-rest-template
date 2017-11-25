@@ -1,4 +1,4 @@
-package main
+package teehee
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-func serveRequests() (err error) {
+func StartServer() (err error) {
 	router := mux.NewRouter()
 	router.HandleFunc("/", HandlerIndex)
 	router.HandleFunc("/config", HandlerReadOnlyConfig)
@@ -16,10 +16,10 @@ func serveRequests() (err error) {
 
 	server := new(http.Server)
 
-	if viper.GetBool("http_tls_enabled") {
+	if viper.GetBool("http.tls.enabled") {
 	} else {
 		server.Addr = fmt.Sprintf("%s:%s",
-			viper.GetString("http_bind_ip"), viper.GetString("http_bind_port"),
+			viper.GetString("http.ip"), viper.GetString("http.port"),
 		)
 		server.Handler = router
 		err = server.ListenAndServe()

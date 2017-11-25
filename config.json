@@ -1,5 +1,0 @@
-{
-	"http_bind_port": "8080",
-	"http_bind_ip": "127.0.0.1",
-	"logging_file": "app.log"
-}

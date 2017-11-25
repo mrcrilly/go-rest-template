@@ -1,4 +1,4 @@
-package main
+package teehee
 
 import (
 	"fmt"

@@ -3,6 +3,7 @@ package teehee
 import (
 	"bytes"
 	"encoding/json"
+	"io"
 	"sync"
 )
 
@@ -17,6 +18,13 @@ func (m *Message) ToJsonString() string {
 	jEncoder := json.NewEncoder(buf)
 	_ = jEncoder.Encode(m)
 	return buf.String()
+}
+
+func MessageJsonToObject(m io.Reader) *Message {
+	jDecoder := json.NewDecoder(m)
+	var result Message
+	_ = jDecoder.Decode(&result)
+	return &result
 }
 
 type Status struct {

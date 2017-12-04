@@ -22,7 +22,9 @@ func config(configFrom io.Reader) (err error) {
 	viper.SetDefault("http.ip", "127.0.0.1")
 	viper.SetDefault("logging.enabled", true)
 	viper.SetDefault("logging.file", "app.log")
+	viper.ReadConfig(configFrom)
 	err = viper.ReadConfig(configFrom)
+
 	if err != nil {
 		return err
 	}

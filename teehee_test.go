@@ -36,7 +36,7 @@ func TestConfig(t *testing.T) {
 }
 
 var TestConfigFromReaderTable = []struct {
-	Config     io.Reader
+	Config     *io.reader
 	ShouldFail bool
 }{
 	{
@@ -47,6 +47,11 @@ var TestConfigFromReaderTable = []struct {
 		`),
 		ShouldFail: false,
 	},
+}
+
+func TestConfigFromReader(t *testing.T) {
+
+}
 	{
 		Config: strings.NewReader(`
 		[fail]]]

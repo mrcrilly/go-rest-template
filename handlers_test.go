@@ -7,10 +7,12 @@ import (
 	"testing"
 
 	"github.com/julienschmidt/httprouter"
+	"github.com/sirupsen/logrus"
 )
 
 func init() {
-	ConfigFromString("")
+	logger := logrus.New()
+	SetLogger(logger)
 }
 
 var HandlerBasicsTable = []struct {

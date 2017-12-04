@@ -35,6 +35,18 @@ type Status struct {
 	HttpStatusCodes map[int]int `json:"http_status_codes"`
 }
 
+// NewStatus is primarily for initialising the
+// map more than anything. Just a concenience method
+func NewStatus() *Status {
+	return &Status{
+		HttpStatusCodes: make(map[int]int, 0),
+	}
+}
+
+// IncrementHttpStatusCode will update the status map
+// in a thread safe manner so we can track the number
+// of, and type of, HTTP status codes we're returning
+// to clients
 func (s *Status) IncrementHttpStatusCode(code int) {
 	s.Lock.Lock()
 	if _, OK := s.HttpStatusCodes[code]; OK {

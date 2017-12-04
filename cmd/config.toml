@@ -1,0 +1,10 @@
+[http]
+ip = "127.0.0.1"
+port = "8080"
+
+[http.tls]
+enabled = false
+
+[logging]
+enabled = true
+file= "app.log" 

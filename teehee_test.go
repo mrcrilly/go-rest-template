@@ -29,7 +29,7 @@ func TestConfig(t *testing.T) {
 			}
 		} else {
 			if err != nil {
-				t.Errorf("Expected a non-failed result for %s\n", tt.File)
+				t.Errorf("Expected a non-failed result for %s; got: %s\n", tt.File, err)
 			}
 		}
 	}
@@ -52,3 +52,26 @@ var TestConfigFromReaderTable = []struct {
 func TestConfigFromReader(t *testing.T) {
 
 }
+	{
+		Config: strings.NewReader(`
+		[fail]]]
+		= bad
+		`),
+		ShouldFail: true,
+	},
+}
+
+//func TestConfigFromReader(t *testing.T) {
+//for _, tt := range TestConfigFromReaderTable {
+//err := ConfigFromReader(tt.Config)
+//if tt.ShouldFail {
+//if err == nil {
+//t.Errorf("Expected a failed result for %s\n", tt.Config)
+//}
+//} else {
+//if err != nil {
+//t.Errorf("Expected a non-failed result for %s; got: %s\n", tt.Config, err)
+//}
+//}
+//}
+//}

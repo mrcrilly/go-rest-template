@@ -1,13 +1,15 @@
-package main
+package teehee
 
 import (
 	"fmt"
 	"net/http"
 
+	"github.com/julienschmidt/httprouter"
 	"github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
 )
 
-func HandlerIndex(w http.ResponseWriter, r *http.Request) {
+func HandlerIndex(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	go globalStatus.IncrementRequestCount()
 	go globalLogger.WithFields(logrus.Fields{
 		"handler": "healthcheck",
@@ -23,7 +25,7 @@ func HandlerIndex(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, result.ToJsonString())
 }
 
-func HandlerReadOnlyConfig(w http.ResponseWriter, r *http.Request) {
+func HandlerReadOnlyConfig(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	go globalStatus.IncrementRequestCount()
 	go globalLogger.WithFields(logrus.Fields{
 		"handler": "healthcheck",
@@ -34,13 +36,13 @@ func HandlerReadOnlyConfig(w http.ResponseWriter, r *http.Request) {
 	result := new(Message)
 	result.Message = "ok"
 	result.Status = http.StatusOK
-	result.Result = globalConfig
+	result.Result = viper.AllSettings()
 
 	go globalStatus.IncrementHttpStatusCode(result.Status)
 	fmt.Fprint(w, result.ToJsonString())
 }
 
-func HandlerHealthCheck(w http.ResponseWriter, r *http.Request) {
+func HandlerHealthCheck(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	go globalStatus.IncrementRequestCount()
 	go globalLogger.WithFields(logrus.Fields{
 		"handler": "healthcheck",

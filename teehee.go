@@ -3,6 +3,7 @@ package teehee
 import (
 	"io"
 	"os"
+	"strings"
 
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
@@ -22,6 +23,11 @@ func config(configFrom io.Reader) (err error) {
 	viper.SetDefault("logging.enabled", true)
 	viper.SetDefault("logging.file", "app.log")
 	viper.ReadConfig(configFrom)
+	err = viper.ReadConfig(configFrom)
+
+	if err != nil {
+		return err
+	}
 
 	if viper.GetBool("logging.enabled") {
 		fd, err := os.OpenFile(
@@ -36,6 +42,10 @@ func config(configFrom io.Reader) (err error) {
 	}
 
 	return
+}
+
+func ConfigFromString(configFrom string) (err error) {
+	return config(strings.NewReader(configFrom))
 }
 
 func ConfigFromReader(configFrom io.Reader) (err error) {

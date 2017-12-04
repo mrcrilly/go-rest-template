@@ -10,6 +10,11 @@ import (
 var globalStatus = NewStatus()
 var globalLogger *logrus.Logger
 
+// SetLogger is a convenient means of setting
+// the package wide Logrus logging instance.
+//
+// TODO: consider making this an interface to
+// abstract the functionality.
 func SetLogger(l *logrus.Logger) {
 	if l == nil {
 		panic(errors.New("need a valid logger object"))
@@ -23,7 +28,6 @@ func SetLogger(l *logrus.Logger) {
 func GetRouter() *httprouter.Router {
 	router := httprouter.New()
 	router.GET("/", HandlerIndex)
-	router.GET("/config", HandlerReadOnlyConfig)
 	router.GET("/health", HandlerHealthCheck)
 	return router
 }

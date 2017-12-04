@@ -35,17 +35,6 @@ var HandlerBasicsTable = []struct {
 		ResultIsNil: false,
 	},
 	{
-		Handler: HandlerReadOnlyConfig,
-		Verb:    "GET",
-		Path:    "/config",
-		Body:    nil,
-		Response: &Message{
-			Message: "ok",
-			Status:  200,
-		},
-		ResultIsNil: false,
-	},
-	{
 		Handler: HandlerIndex,
 		Verb:    "GET",
 		Path:    "/",

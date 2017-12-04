@@ -7,12 +7,18 @@ import (
 	"sync"
 )
 
+// Message represents the response given to clients
+// after making a request (successful or not) to the
+// service's endpoints.
 type Message struct {
 	Message string      `json:"message"`
 	Status  int         `json:"status"`
 	Result  interface{} `json:"result"`
 }
 
+// ToJsonString is a helper function for converting
+// a Message from its native type into a string for
+// easy printing or other types of rendering
 func (m *Message) ToJsonString() string {
 	buf := new(bytes.Buffer)
 	jEncoder := json.NewEncoder(buf)
@@ -20,6 +26,9 @@ func (m *Message) ToJsonString() string {
 	return buf.String()
 }
 
+// MessageJsonToObject is a helper function for
+// converting Message types received as JSON into
+// their native type.
 func MessageJsonToObject(m io.Reader) *Message {
 	jDecoder := json.NewDecoder(m)
 	var result Message
@@ -27,6 +36,12 @@ func MessageJsonToObject(m io.Reader) *Message {
 	return &result
 }
 
+// Status is used for tracking various aspects
+// of the service's state, such as requests handled
+// and HTTP status codes returned.
+//
+// It's safe to update this struct on a service-by-service
+// basis.
 type Status struct {
 	Lock sync.Mutex `json:"-"`
 
@@ -57,6 +72,9 @@ func (s *Status) IncrementHttpStatusCode(code int) {
 	s.Lock.Unlock()
 }
 
+// IncrementRequestCount is a simple, thread safe
+// method for incrementing the total number of requests
+// this service has received
 func (s *Status) IncrementRequestCount() {
 	s.Lock.Lock()
 	s.RequestCount += 1

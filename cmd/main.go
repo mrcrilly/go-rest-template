@@ -21,6 +21,9 @@ func init() {
 	viper.AddConfigPath(".")
 	checkErrorAndPanic(viper.ReadInConfig())
 
+	// TODO: make this an interface as opposed to using
+	// logrus directly
+	// TODO: make this its own routine
 	if viper.GetBool("logging.enabled") {
 		fd, err := os.OpenFile(
 			viper.GetString("logging.file"),
@@ -39,6 +42,7 @@ func startServer() (err error) {
 	router := teehee.GetRouter()
 	httpServer := new(http.Server)
 	if viper.GetBool("http.tls.enabled") {
+		// Currently awaiting implementation
 	} else {
 		httpServer.Addr = fmt.Sprintf("%s:%s",
 			viper.GetString("http.ip"),
